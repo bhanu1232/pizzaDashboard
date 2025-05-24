@@ -9,5 +9,9 @@ export default function SessionProvider({
     children: React.ReactNode;
     session: any;
 }) {
-    return <Provider session={session}>{children}</Provider>;
+    return (
+        <Provider session={session} basePath="/api/auth">
+            {children}
+        </Provider>
+    );
 } 

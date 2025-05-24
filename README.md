@@ -66,6 +66,70 @@ yarn dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+## Deployment
+
+### Deploying to Vercel
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+
+2. Go to [Vercel](https://vercel.com) and create a new project
+
+3. Import your repository
+
+4. Configure environment variables in Vercel:
+
+   - Go to Project Settings > Environment Variables
+   - Add the following variables:
+     ```
+     GOOGLE_CLIENT_ID=your_google_client_id
+     GOOGLE_CLIENT_SECRET=your_google_client_secret
+     NEXTAUTH_SECRET=your_nextauth_secret
+     NEXTAUTH_URL=your_deployment_url
+     ```
+
+5. Update Google OAuth settings:
+
+   - Go to Google Cloud Console
+   - Add your deployment URL to authorized redirect URIs:
+     ```
+     https://your-domain.vercel.app/api/auth/callback/google
+     ```
+
+6. Deploy your application
+
+### Common Deployment Issues
+
+#### Server-Side Exception Error
+
+If you encounter "Application error: a server-side exception has occurred", check the following:
+
+1. Environment Variables:
+
+   - Verify all required environment variables are set in your deployment platform
+   - Ensure NEXTAUTH_URL matches your deployment URL
+   - Check if NEXTAUTH_SECRET is properly set
+
+2. Google OAuth Configuration:
+
+   - Verify the authorized redirect URI includes your deployment URL
+   - Check if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are correct
+   - Ensure the Google OAuth API is enabled in your Google Cloud Console
+
+3. Build Configuration:
+
+   - Check if your `next.config.js` is properly configured
+   - Verify all dependencies are listed in `package.json`
+   - Ensure you're using compatible versions of Next.js and React
+
+4. Debugging Steps:
+   - Check deployment logs in your hosting platform
+   - Verify the build process completes successfully
+   - Test the application locally with production build:
+     ```bash
+     npm run build
+     npm run start
+     ```
+
 ## Project Structure
 
 ```

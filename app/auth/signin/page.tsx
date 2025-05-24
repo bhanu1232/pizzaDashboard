@@ -3,13 +3,24 @@
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function SignIn() {
     const [isLoading, setIsLoading] = useState(false);
+    const searchParams = useSearchParams();
+    const error = searchParams.get('error');
 
     const handleSignIn = async () => {
-        setIsLoading(true);
-        await signIn('google', { callbackUrl: '/' });
+        try {
+            setIsLoading(true);
+            await signIn('google', {
+                callbackUrl: '/',
+                redirect: true
+            });
+        } catch (error) {
+            console.error('Sign in error:', error);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -22,6 +33,20 @@ export default function SignIn() {
                     <p className="mt-2 text-sm text-gray-600">
                         Please sign in to continue
                     </p>
+                    {error && (
+                        <p className="mt-2 text-sm text-red-600">
+                            {error === 'OAuthSignin' && 'Error signing in with Google'}
+                            {error === 'OAuthCallback' && 'Error during Google callback'}
+                            {error === 'OAuthCreateAccount' && 'Error creating account'}
+                            {error === 'EmailCreateAccount' && 'Error creating account'}
+                            {error === 'Callback' && 'Error during callback'}
+                            {error === 'OAuthAccountNotLinked' && 'Email already in use with different provider'}
+                            {error === 'EmailSignin' && 'Error signing in with email'}
+                            {error === 'CredentialsSignin' && 'Invalid credentials'}
+                            {error === 'SessionRequired' && 'Please sign in to access this page'}
+                            {error === 'Default' && 'Unable to sign in'}
+                        </p>
+                    )}
                 </div>
                 <div className="mt-8">
                     <button

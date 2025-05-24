@@ -1,214 +1,155 @@
-# Pizza Dashboard
+# Pizza Ordering System
 
-A modern web application for managing pizza orders with real-time updates and a beautiful user interface.
+## Overview
+
+A modern pizza ordering system built with Next.js that allows users to browse the menu, place orders, and track their order status. The application features user authentication, real-time order tracking, and a responsive design for both desktop and mobile devices.
 
 ## Features
 
-- 🔐 Google Authentication
-- 📊 Interactive Dashboard
-- 📋 Order Management
-- 🔄 Real-time Updates
-- 🎨 Modern UI with Tailwind CSS
+- 🔐 Google OAuth Authentication
+- 🍕 Interactive Pizza Menu
+- 🛒 Shopping Cart Functionality
 - 📱 Responsive Design
-- ⚡ Fast Page Transitions
-- 🔄 Loading States
+- 📊 Order Tracking
+- 🔄 Real-time Updates
+
+## Tech Stack
+
+- **Framework**: Next.js 14
+- **Authentication**: NextAuth.js
+- **Database**: MongoDB with Prisma ORM
+- **Styling**: Tailwind CSS
+- **Icons**: Heroicons
+- **State Management**: React Context API
+- **Form Handling**: React Hook Form
+- **Validation**: Zod
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+- Node.js 18.x or later
+- MongoDB database
+- Google OAuth credentials
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Google Cloud Platform account (for OAuth credentials)
+## Local Development Setup
 
-## Environment Setup
+1. **Clone the repository**
 
-1. Create a `.env.local` file in the root directory with the following variables:
+   ```bash
+   git clone <repository-url>
+   cd pizza-ordering-system
+   ```
 
-```env
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-NEXTAUTH_SECRET=your_nextauth_secret
-NEXTAUTH_URL=http://localhost:3000
-```
+2. **Install dependencies**
 
-2. To get Google OAuth credentials:
-   - Go to [Google Cloud Console](https://console.cloud.google.com)
-   - Create a new project
-   - Enable Google OAuth API
+   ```bash
+   npm install
+   ```
+
+3. **Environment Variables**
+   Create a `.env.local` file in the root directory with the following variables:
+
+   ```env
+   # Database
+   DATABASE_URL="your_mongodb_connection_string"
+
+   # NextAuth
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your_nextauth_secret"
+
+   # Google OAuth
+   GOOGLE_CLIENT_ID="your_google_client_id"
+   GOOGLE_CLIENT_SECRET="your_google_client_secret"
+   ```
+
+4. **Google OAuth Setup**
+
+   - Go to the [Google Cloud Console](https://console.cloud.google.com)
+   - Create a new project or select an existing one
+   - Enable the Google+ API
    - Create OAuth 2.0 credentials
-   - Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+   - Add authorized redirect URIs:
+     - `http://localhost:3000/api/auth/callback/google` (for development)
+     - `https://your-production-domain.com/api/auth/callback/google` (for production)
+   - Copy the Client ID and Client Secret to your `.env.local` file
 
-## Installation
+5. **Database Setup**
 
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd pizza-dashboard
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Deployment
-
-### Deploying to Vercel
-
-1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
-
-2. Go to [Vercel](https://vercel.com) and create a new project
-
-3. Import your repository
-
-4. Configure environment variables in Vercel:
-
-   - Go to Project Settings > Environment Variables
-   - Add the following variables:
-     ```
-     GOOGLE_CLIENT_ID=your_google_client_id
-     GOOGLE_CLIENT_SECRET=your_google_client_secret
-     NEXTAUTH_SECRET=your_nextauth_secret
-     NEXTAUTH_URL=your_deployment_url
-     ```
-
-5. Update Google OAuth settings:
-
-   - Go to Google Cloud Console
-   - Add your deployment URL to authorized redirect URIs:
-     ```
-     https://your-domain.vercel.app/api/auth/callback/google
-     ```
-
-6. Deploy your application
-
-### Common Deployment Issues
-
-#### Server-Side Exception Error
-
-If you encounter "Application error: a server-side exception has occurred", check the following:
-
-1. Environment Variables:
-
-   - Verify all required environment variables are set in your deployment platform
-   - Ensure NEXTAUTH_URL matches your deployment URL
-   - Check if NEXTAUTH_SECRET is properly set
-
-2. Google OAuth Configuration:
-
-   - Verify the authorized redirect URI includes your deployment URL
-   - Check if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are correct
-   - Ensure the Google OAuth API is enabled in your Google Cloud Console
-
-3. Build Configuration:
-
-   - Check if your `next.config.js` is properly configured
-   - Verify all dependencies are listed in `package.json`
-   - Ensure you're using compatible versions of Next.js and React
-
-4. Debugging Steps:
-   - Check deployment logs in your hosting platform
-   - Verify the build process completes successfully
-   - Test the application locally with production build:
+   - Create a MongoDB database (local or Atlas)
+   - Update the `DATABASE_URL` in your `.env.local` file
+   - Run Prisma migrations:
      ```bash
-     npm run build
-     npm run start
+     npx prisma generate
+     npx prisma db push
      ```
+
+6. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+7. **Open [http://localhost:3000](http://localhost:3000) in your browser**
+
+## Production Deployment
+
+1. **Environment Variables**
+
+   - Set up the same environment variables in your hosting platform (e.g., Vercel)
+   - Update `NEXTAUTH_URL` to your production domain
+
+2. **Build and Deploy**
+   ```bash
+   npm run build
+   npm start
+   ```
 
 ## Project Structure
 
 ```
-pizza-dashboard/
 ├── app/
-│   ├── api/              # API routes
-│   ├── auth/             # Authentication pages
-│   ├── components/       # Reusable components
-│   ├── dashboard/        # Dashboard pages
-│   └── layout.tsx        # Root layout
-├── public/              # Static files
-└── package.json         # Dependencies and scripts
+│   ├── api/           # API routes
+│   ├── auth/          # Authentication pages
+│   ├── dashboard/     # Dashboard pages
+│   └── layout.tsx     # Root layout
+├── components/        # Reusable components
+├── lib/              # Utility functions
+├── prisma/           # Database schema
+└── public/           # Static assets
 ```
 
-## Available Scripts
+## Assumptions and Challenges
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+### Assumptions
 
-## Features in Detail
+- Users have a Google account for authentication
+- MongoDB is available for data storage
+- Users have a modern web browser with JavaScript enabled
 
-### Authentication
+### Challenges Faced
 
-- Secure Google OAuth integration
-- Protected routes
-- Session management
-- Loading states during authentication
+1. **Real-time Updates**: Implemented a polling mechanism for order status updates
+2. **Mobile Responsiveness**: Created a responsive design with a mobile-first approach
+3. **State Management**: Used React Context for global state management
+4. **Authentication Flow**: Configured NextAuth.js with Google OAuth
+5. **Database Schema**: Designed an efficient schema for orders and user data
 
-### Dashboard
+## Third-Party Libraries
 
-- Overview of all orders
-- Real-time updates
-- Interactive charts and statistics
-- Responsive design for all devices
-
-### Order Management
-
-- View all orders in a sortable table
-- Filter orders by status
-- Sort by different columns
-- Status updates with color-coded badges
-
-### UI/UX Features
-
-- Smooth page transitions
-- Loading spinners for better UX
-- Responsive design
-- Modern and clean interface
-- Dark mode support
+- `@heroicons/react`: Icon library
+- `@prisma/client`: Database ORM
+- `react-hook-form`: Form handling
+- `zod`: Schema validation
+- `clsx`: Conditional class name utility
+- `date-fns`: Date formatting and manipulation
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support, email [your-email] or open an issue in the repository.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
